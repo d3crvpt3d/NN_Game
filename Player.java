@@ -1,4 +1,3 @@
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -6,13 +5,12 @@ import javax.imageio.ImageIO;
 public class Player extends Entity{
 
     Fps FPS;
-    BufferedImage right;
-    BufferedImage left;
-    BufferedImage jump;
 
-    public Player(Fps FPS){
-        //this.gp = gp;
+    public Player(Fps FPS, Double x, Double y){
         this.FPS = FPS;
+        this.x = x;
+        this.y = y;
+
         try{
             img = ImageIO.read(new File("bin/character_right.png"));
         }catch(IOException e){
@@ -28,8 +26,6 @@ public class Player extends Entity{
         maxSpeed_Y = 1000/FPS.FPS; // 1000pix/s (max fall speed)
         airSpeed = speed * .015;
         gravity = 12/(double)FPS.FPS;// 12pix/s
-        x=640;
-        y=200;
         width = 32;
         height = 64;
         luftwiderstand = .99;
@@ -49,17 +45,4 @@ public class Player extends Entity{
         }
     }
 
-    public void update(){
-
-        switch(direction){
-        case "right":
-            img = right;
-            break;
-        case "left":
-            img = left;
-            break;
-        case "jump":
-            img = jump;
-        }
-    }
 }

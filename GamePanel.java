@@ -6,16 +6,18 @@ public class GamePanel extends JPanel implements Runnable{
     Fps FPS = new Fps(144); //set FPS
 
     Structure[] structureList = new Structure[7]; // anzahl der structures
-    Entity[] entityList = new Entity[1]; //anzahl der player
+    Entity[] entityList = new Entity[2]; //anzahl der player
 
     //for iteration
-    Entity currPlayer = null;
+    Entity currEntity;
     Structure currStructure;
 
     //collision variables
     boolean collision = false, x_coll = true, y_coll = false;
     Structure coll_struc0;
     Structure coll_struc1;
+
+    //iteratoren
     int iterator;
     int iterator2;
 
@@ -26,16 +28,15 @@ public class GamePanel extends JPanel implements Runnable{
     KeyHandler keyHgp;
 
     public GamePanel(KeyHandler keyHgp){
-        player = new Player(FPS);
 
         this.keyHgp = keyHgp;
         this.setDoubleBuffered(true);
         this.setFocusable(true);
         this.setBackground(Color.white);
-        player.setDefaultValues();
 
         //declare Entity's and Structures
-        entityList[0] = player;
+        entityList[0] = new Player(FPS, 400., 400.);
+        entityList[1] = new Player(FPS, 350., 600.);
 
         structureList[0] = new Walls(0,1060,1920,20, "stone");
         structureList[1] = new Walls(0,0,20,1080, "stone");
@@ -70,8 +71,11 @@ public class GamePanel extends JPanel implements Runnable{
             timer += (currentTime - lastTime);
             lastTime = currentTime;
 
+            //per tick
             if(delta >= 1){
-                player.update();
+                for(iterator2 = 0; iterator2 < entityList.length; iterator2++){
+                    entityList[iterator2].update();
+                }
                 this.update();
                 repaint();
                 delta--;
@@ -88,81 +92,81 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void update(){
 
-        //controls for player
-        if(keyHgp.aPressed){
-            player.direction = "left";
-            if(player.onGround){
-                player.force_X -= player.speed;
-            }else{
-                player.force_X -= player.airSpeed;
-            }
-        }
-        if(keyHgp.dPressed){
-            player.direction = "right";
-            if(player.onGround){
-                player.force_X += player.speed;
-            }else{
-                player.force_X += player.airSpeed;
-            }
-        }
-
-        if(keyHgp.spacePressed && player.onGround){
-            player.direction = "jump"; //visual
-            player.force_Y_down = -player.gravity*80;
-            player.onGround = false;
-        }
-
-       
-        //collision detection
         for(iterator2 = 0; iterator2 < entityList.length; iterator2++){ //player iterator
-            currPlayer = entityList[iterator2];
+            currEntity = entityList[iterator2];
+
+            //controls for player
+            if(keyHgp.aPressed){
+                currEntity.direction = "left";
+                if(currEntity.onGround){
+                    currEntity.force_X -= currEntity.speed;
+                }else{
+                    currEntity.force_X -= currEntity.airSpeed;
+                }
+            }
+            if(keyHgp.dPressed){
+                currEntity.direction = "right";
+                if(currEntity.onGround){
+                    currEntity.force_X += currEntity.speed;
+                }else{
+                    currEntity.force_X += currEntity.airSpeed;
+                }
+            }
+            if(keyHgp.spacePressed && currEntity.onGround){
+                currEntity.direction = "jump"; //visual
+                currEntity.force_Y_down = -currEntity.gravity*80;
+                currEntity.onGround = false;
+            }
+
+
+            //collision detection
 
             //set onGround
             for(iterator = 0; iterator < structureList.length; iterator++){
                 currStructure = structureList[iterator];
-                if(currPlayer.y + currPlayer.height == currStructure.y){
-                    currPlayer.onGround = true;
+                if(currEntity.y + currEntity.height == currStructure.y){
+                    currEntity.onGround = true;
                 }
             }
 
             //gravity
-            if(!currPlayer.onGround){
-                currPlayer.force_Y_down += currPlayer.gravity;
+            if(!currEntity.onGround){
+                currEntity.force_Y_down += currEntity.gravity;
             }
 
             //nur wenn player y-force hat
-            if(currPlayer.force_Y_down != 0){
+            if(currEntity.force_Y_down != 0){
 
-                if(currPlayer.force_Y_down > 0){
-                    currPlayer.force_Y_down = Math.min(currPlayer.force_Y_down, currPlayer.maxSpeed_Y);
+                if(currEntity.force_Y_down > 0){
+                    currEntity.force_Y_down = Math.min(currEntity.force_Y_down, currEntity.maxSpeed_Y);
                 }else{
-                    currPlayer.force_Y_down = Math.max(currPlayer.force_Y_down, -currPlayer.maxSpeed_Y);
+                    currEntity.force_Y_down = Math.max(currEntity.force_Y_down, -currEntity.maxSpeed_Y);
                 }
 
-                currPlayer.y += currPlayer.force_Y_down;
+                currEntity.y += currEntity.force_Y_down;
 
                 //Y resolve
                 for(iterator = 0; iterator < structureList.length; iterator++){ //walls iterator
                     currStructure = structureList[iterator];
 
                     //collision detection
-                    if((currPlayer.y + currPlayer.height > currStructure.y)
-                    && !(currPlayer.y > currStructure.y + currStructure.height)
-                    && (currPlayer.x + currPlayer.width > currStructure.x)
-                    && !(currPlayer.x >= currStructure.x + currStructure.width)){
+                    if((currEntity.y + currEntity.height > currStructure.y)
+                    && !(currEntity.y > currStructure.y + currStructure.height)
+                    && (currEntity.x + currEntity.width > currStructure.x)
+                    && !(currEntity.x >= currStructure.x + currStructure.width)){
                         
                         //down or up
-                        if(currPlayer.force_Y_down > 0){
+                        if(currEntity.force_Y_down > 0){
 
                             //move player
-                            currPlayer.y = currStructure.y - currPlayer.height;
-                            currPlayer.force_Y_down = 0;
-                            currPlayer.onGround = true; //exlusive on fall
+                            currEntity.y = currStructure.y - currEntity.height;
+                            currEntity.force_Y_down = 0;
+                            currEntity.onGround = true; //exlusive on fall
                         }else{
 
                             //move player
-                            currPlayer.y = currStructure.y + currStructure.height;
-                            currPlayer.force_Y_down = 0;
+                            currEntity.y = currStructure.y + currStructure.height;
+                            currEntity.force_Y_down = 0;
                         }
                     }
 
@@ -170,40 +174,40 @@ public class GamePanel extends JPanel implements Runnable{
                 }
 
                 //physics Y
-                currPlayer.force_Y_down *= currPlayer.luftwiderstand;
+                currEntity.force_Y_down *= currEntity.luftwiderstand;
             }
 
             //nur wenn player x-force hat
-            if(currPlayer.force_X != 0){
+            if(currEntity.force_X != 0){
 
-                if(currPlayer.force_X > 0){
-                    currPlayer.force_X = Math.min(currPlayer.force_X, currPlayer.maxSpeed);
+                if(currEntity.force_X > 0){
+                    currEntity.force_X = Math.min(currEntity.force_X, currEntity.maxSpeed);
                 }else{
-                    currPlayer.force_X = Math.max(currPlayer.force_X, -currPlayer.maxSpeed);
+                    currEntity.force_X = Math.max(currEntity.force_X, -currEntity.maxSpeed);
                 }
-                currPlayer.x += currPlayer.force_X;
+                currEntity.x += currEntity.force_X;
 
                 //X resolve
                 for(iterator = 0; iterator < structureList.length; iterator++){//walls iterator
                     currStructure = structureList[iterator];
 
                     //collision detection
-                    if((currPlayer.y + currPlayer.height > currStructure.y)
-                    && !(currPlayer.y > currStructure.y + currStructure.height)
-                    && (currPlayer.x + currPlayer.width > currStructure.x)
-                    && !(currPlayer.x >= currStructure.x + currStructure.width)){
+                    if((currEntity.y + currEntity.height > currStructure.y)
+                    && !(currEntity.y > currStructure.y + currStructure.height)
+                    && (currEntity.x + currEntity.width > currStructure.x)
+                    && !(currEntity.x >= currStructure.x + currStructure.width)){
                     
                         //right or left
-                        if(currPlayer.force_X > 0){
+                        if(currEntity.force_X > 0){
 
                             //move player
-                            currPlayer.x = currStructure.x - currPlayer.width; //-.1
-                            currPlayer.force_X = 0;
+                            currEntity.x = currStructure.x - currEntity.width; //-.1
+                            currEntity.force_X = 0;
                         }else{
 
                             //move player
-                            currPlayer.x = currStructure.x + currStructure.width; //+.1
-                            currPlayer.force_X = 0;
+                            currEntity.x = currStructure.x + currStructure.width; //+.1
+                            currEntity.force_X = 0;
                         }
                     }
 
@@ -212,8 +216,8 @@ public class GamePanel extends JPanel implements Runnable{
             }
 
             //no sliding
-            if(currPlayer.onGround){
-                currPlayer.force_X = 0;
+            if(currEntity.onGround){
+                currEntity.force_X = 0;
             }
 
             //player iterator end
@@ -228,12 +232,12 @@ public class GamePanel extends JPanel implements Runnable{
 		for(int i = 0; i < structureList.length; i++){
             currStructure = structureList[i];
 
-            g.drawImage(currStructure.getImg(), (int)currStructure.x, (int)currStructure.y,null);
+            g.drawImage(currStructure.getImg(), (int)currStructure.x, (int)currStructure.y,this);
         }
         for(int j = 0; j < entityList.length; j++){
-            currPlayer = entityList[j];
+            currEntity = entityList[j];
 
-            g.drawImage(currPlayer.getImg(), (int)currPlayer.x, (int)currPlayer.y, null);
+            g.drawImage(currEntity.getImg(), (int)currEntity.x, (int)currEntity.y, this);
         }
 	}
 }

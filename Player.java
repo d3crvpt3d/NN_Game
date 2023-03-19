@@ -4,7 +4,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Player extends Entity implements GetImage{
-    GamePanel gp;
+    //GamePanel gp;
 
     Fps FPS;
     BufferedImage right;
@@ -13,8 +13,8 @@ public class Player extends Entity implements GetImage{
 
     BufferedImage image;
 
-    public Player(GamePanel gp, Fps FPS){
-        this.gp = gp;
+    public Player(Fps FPS){
+        //this.gp = gp;
         this.FPS = FPS;
         try{
             image = ImageIO.read(new File("bin/character_right.png"));

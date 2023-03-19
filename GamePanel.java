@@ -40,7 +40,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         //declare Entity's and Structures
         for(it = 0; it < entityList.length; it++){
-            entityList[it] = new Player(FPS, 350., 600.);
+            entityList[it] = new Player(FPS, 50., 900.);
         }
         
 
@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable{
         structureList[3] = new Walls(0,0,1920,20, "stone");
         
         for(it = 4; it < structureList.length; it++){
-            structureList[it] = new Walls(rand.nextInt(1821), rand.nextInt(981), rand.nextInt(81) + 20, rand.nextInt(81) + 20, "stone");
+            structureList[it] = new Walls(rand.nextInt(1721), rand.nextInt(881), rand.nextInt(181) + 20, rand.nextInt(181) + 20, "stone");
         }
     }
 

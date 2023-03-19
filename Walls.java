@@ -1,9 +1,8 @@
 import java.io.File;
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.awt.image.BufferedImage;
 
-public class Walls extends Structure implements GetImage{
+public class Walls extends Structure{
 
     //init wall with default texture
     public Walls(double x, double y, double width, double height){
@@ -36,10 +35,5 @@ public class Walls extends Structure implements GetImage{
             e.printStackTrace();
         }
         img = img.getSubimage(0, 0, (int)this.width, (int)this.height);
-    }
-
-    @Override
-    public BufferedImage getImg() {
-        return img;
     }
 }

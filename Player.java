@@ -3,21 +3,18 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class Player extends Entity implements GetImage{
-    //GamePanel gp;
+public class Player extends Entity{
 
     Fps FPS;
     BufferedImage right;
     BufferedImage left;
     BufferedImage jump;
 
-    BufferedImage image;
-
     public Player(Fps FPS){
         //this.gp = gp;
         this.FPS = FPS;
         try{
-            image = ImageIO.read(new File("bin/character_right.png"));
+            img = ImageIO.read(new File("bin/character_right.png"));
         }catch(IOException e){
             System.out.println(e);
         }
@@ -52,21 +49,17 @@ public class Player extends Entity implements GetImage{
         }
     }
 
-    public BufferedImage getImg(){
-        return image;
-    }
-
     public void update(){
 
         switch(direction){
         case "right":
-            image = right;
+            img = right;
             break;
         case "left":
-            image = left;
+            img = left;
             break;
         case "jump":
-            image = jump;
+            img = jump;
         }
     }
 }

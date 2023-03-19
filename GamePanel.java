@@ -5,8 +5,8 @@ public class GamePanel extends JPanel implements Runnable{
     
     Fps FPS = new Fps(144); //set FPS
 
-    Structure[] wallsList = new Structure[4]; // anzahl der structures
-    Entity[] playerList = new Entity[1]; //anzahl der player
+    Structure[] structureList = new Structure[7]; // anzahl der structures
+    Entity[] entityList = new Entity[1]; //anzahl der player
 
     //for iteration
     Entity currPlayer = null;
@@ -16,6 +16,9 @@ public class GamePanel extends JPanel implements Runnable{
     Walls wall1;
     Walls wall2;
     Walls wall3;
+    Walls wall4;
+    Walls wall5;
+    Walls wall6;
 
     //collision variables
     boolean collision = false, x_coll = true, y_coll = false;
@@ -37,6 +40,9 @@ public class GamePanel extends JPanel implements Runnable{
         wall1 = new Walls(0,0,20,1080, "stone");
         wall2 = new Walls(1900,0,20,1080, "stone");
         wall3 = new Walls(0,0,1920,20, "stone");
+        wall4 = new Walls(20,1800,200,10);
+        wall5 = new Walls(860,1700,200,10);
+        wall6 = new Walls(20,1600,200,10);
 
         this.keyHgp = keyHgp;
         this.setDoubleBuffered(true);
@@ -44,11 +50,15 @@ public class GamePanel extends JPanel implements Runnable{
         this.setBackground(Color.white);
         player.setDefaultValues();
 
-        playerList[0] = player;
-        wallsList[0] = wall0;
-        wallsList[1] = wall1;
-        wallsList[2] = wall2;
-        wallsList[3] = wall3;
+        entityList[0] = player;
+
+        structureList[0] = wall0;
+        structureList[1] = wall1;
+        structureList[2] = wall2;
+        structureList[3] = wall3;
+        structureList[4] = wall4;
+        structureList[5] = wall5;
+        structureList[6] = wall6;
     }
 
     public void startGameThread(){
@@ -119,12 +129,12 @@ public class GamePanel extends JPanel implements Runnable{
 
        
         //collision detection
-        for(iterator2 = 0; iterator2 < playerList.length; iterator2++){ //player iterator
-            currPlayer = playerList[iterator2];
+        for(iterator2 = 0; iterator2 < entityList.length; iterator2++){ //player iterator
+            currPlayer = entityList[iterator2];
 
             //set onGround
-            for(iterator = 0; iterator < wallsList.length; iterator++){
-                currStructure = wallsList[iterator];
+            for(iterator = 0; iterator < structureList.length; iterator++){
+                currStructure = structureList[iterator];
                 if(currPlayer.y + currPlayer.height == currStructure.y){
                     currPlayer.onGround = true;
                 }
@@ -147,8 +157,8 @@ public class GamePanel extends JPanel implements Runnable{
                 currPlayer.y += currPlayer.force_Y_down;
 
                 //Y resolve
-                for(iterator = 0; iterator < wallsList.length; iterator++){ //walls iterator
-                    currStructure = wallsList[iterator];
+                for(iterator = 0; iterator < structureList.length; iterator++){ //walls iterator
+                    currStructure = structureList[iterator];
 
                     //collision detection
                     if((currPlayer.y + currPlayer.height > currStructure.y)
@@ -189,8 +199,8 @@ public class GamePanel extends JPanel implements Runnable{
                 currPlayer.x += currPlayer.force_X;
 
                 //X resolve
-                for(iterator = 0; iterator < wallsList.length; iterator++){//walls iterator
-                    currStructure = wallsList[iterator];
+                for(iterator = 0; iterator < structureList.length; iterator++){//walls iterator
+                    currStructure = structureList[iterator];
 
                     //collision detection
                     if((currPlayer.y + currPlayer.height > currStructure.y)
@@ -230,15 +240,15 @@ public class GamePanel extends JPanel implements Runnable{
     @Override
     public void paint(Graphics g) { // paint() method
 		super.paint(g);
-		for(int i = 0; i < wallsList.length; i++){
-            currStructure = wallsList[i];
+		for(int i = 0; i < structureList.length; i++){
+            currStructure = structureList[i];
 
-            g.drawImage( ((Walls)currStructure).getImg(), (int)currStructure.x, (int)currStructure.y,null);
+            g.drawImage(currStructure.getImg(), (int)currStructure.x, (int)currStructure.y,null);
         }
-        for(int j = 0; j < playerList.length; j++){
-            currPlayer = playerList[j];
+        for(int j = 0; j < entityList.length; j++){
+            currPlayer = entityList[j];
 
-            g.drawImage(((Player) currPlayer).getImg(), (int)currPlayer.x, (int)currPlayer.y, null);
+            g.drawImage(currPlayer.getImg(), (int)currPlayer.x, (int)currPlayer.y, null);
         }
 	}
 }

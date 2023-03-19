@@ -12,14 +12,6 @@ public class GamePanel extends JPanel implements Runnable{
     Entity currPlayer = null;
     Structure currStructure;
 
-    Walls wall0;
-    Walls wall1;
-    Walls wall2;
-    Walls wall3;
-    Walls wall4;
-    Walls wall5;
-    Walls wall6;
-
     //collision variables
     boolean collision = false, x_coll = true, y_coll = false;
     Structure coll_struc0;
@@ -36,29 +28,22 @@ public class GamePanel extends JPanel implements Runnable{
     public GamePanel(KeyHandler keyHgp){
         player = new Player(FPS);
 
-        wall0 = new Walls(0,1060,1920,20, "stone");
-        wall1 = new Walls(0,0,20,1080, "stone");
-        wall2 = new Walls(1900,0,20,1080, "stone");
-        wall3 = new Walls(0,0,1920,20, "stone");
-        wall4 = new Walls(20,1800,200,10);
-        wall5 = new Walls(860,1700,200,10);
-        wall6 = new Walls(20,1600,200,10);
-
         this.keyHgp = keyHgp;
         this.setDoubleBuffered(true);
         this.setFocusable(true);
         this.setBackground(Color.white);
         player.setDefaultValues();
 
+        //declare Entity's and Structures
         entityList[0] = player;
 
-        structureList[0] = wall0;
-        structureList[1] = wall1;
-        structureList[2] = wall2;
-        structureList[3] = wall3;
-        structureList[4] = wall4;
-        structureList[5] = wall5;
-        structureList[6] = wall6;
+        structureList[0] = new Walls(0,1060,1920,20, "stone");
+        structureList[1] = new Walls(0,0,20,1080, "stone");
+        structureList[2] = new Walls(1900,0,20,1080, "stone");
+        structureList[3] = new Walls(0,0,1920,20, "stone");
+        structureList[4] = new Walls(20,1800,200,10);
+        structureList[5] = new Walls(860,1700,200,10);
+        structureList[6] = new Walls(20,1600,200,10);
     }
 
     public void startGameThread(){

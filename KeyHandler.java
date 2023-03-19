@@ -2,7 +2,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener{
-    public boolean aPressed, dPressed, spacePressed, exit;
+    public boolean aPressed, dPressed, spacePressed;
     int code;
 
     @Override
@@ -24,7 +24,7 @@ public class KeyHandler implements KeyListener{
             spacePressed = true;
         }
         if(code == KeyEvent.VK_ESCAPE){
-            exit = true;
+            System.exit(0);
         }
     }
 

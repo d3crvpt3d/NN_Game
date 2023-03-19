@@ -23,8 +23,6 @@ public class Entity implements GetImage{
             break;
         case "jump":
             img = jump;
-        default:
-            img = right;
         }
     }
 }

@@ -25,7 +25,7 @@ public class Player extends Entity{
         maxSpeed = 800/FPS.FPS;// 800pix/s (max ground speed)
         maxSpeed_Y = 1000/FPS.FPS; // 1000pix/s (max fall speed)
         airSpeed = speed * .015;
-        gravity = 12/(double)FPS.FPS;// 12pix/s
+        gravity = 6/(.5 * (double)FPS.FPS);// 12pix/s
         width = 32;
         height = 64;
         luftwiderstand = .99;

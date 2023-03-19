@@ -13,15 +13,11 @@ public class GamePanel extends JPanel implements Runnable{
     Structure currStructure;
 
     //collision variables
-    boolean collision = false, x_coll = true, y_coll = false;
-    Structure coll_struc0;
-    Structure coll_struc1;
+    boolean collision = false;
 
     //iteratoren
     int iterator;
     int iterator2;
-
-    boolean x_rearrange, y_rearrange;
 
     Thread gameThread;
     Player player;
@@ -42,9 +38,9 @@ public class GamePanel extends JPanel implements Runnable{
         structureList[1] = new Walls(0,0,20,1080, "stone");
         structureList[2] = new Walls(1900,0,20,1080, "stone");
         structureList[3] = new Walls(0,0,1920,20, "stone");
-        structureList[4] = new Walls(20,1800,200,10);
-        structureList[5] = new Walls(860,1700,200,10);
-        structureList[6] = new Walls(20,1600,200,10);
+        structureList[4] = new Walls(20,960,200,10);
+        structureList[5] = new Walls(1700,860,200,10);
+        structureList[6] = new Walls(20,760,200,10);
     }
 
     public void startGameThread(){
@@ -95,6 +91,8 @@ public class GamePanel extends JPanel implements Runnable{
         for(iterator2 = 0; iterator2 < entityList.length; iterator2++){ //player iterator
             currEntity = entityList[iterator2];
 
+            
+
             //controls for player
             if(keyHgp.aPressed){
                 currEntity.direction = "left";
@@ -118,13 +116,16 @@ public class GamePanel extends JPanel implements Runnable{
                 currEntity.onGround = false;
             }
 
-
+            
             //collision detection
-
-            //set onGround
+            
+            //check onGround
+            currEntity.onGround = false;
             for(iterator = 0; iterator < structureList.length; iterator++){
                 currStructure = structureList[iterator];
-                if(currEntity.y + currEntity.height == currStructure.y){
+                if(currEntity.y + currEntity.height == currStructure.y
+                && currEntity.x + currEntity.width > currStructure.x
+                && currEntity.x < currStructure.x + currStructure.width){
                     currEntity.onGround = true;
                 }
             }
@@ -151,7 +152,7 @@ public class GamePanel extends JPanel implements Runnable{
 
                     //collision detection
                     if((currEntity.y + currEntity.height > currStructure.y)
-                    && !(currEntity.y > currStructure.y + currStructure.height)
+                    && !(currEntity.y >= currStructure.y + currStructure.height)
                     && (currEntity.x + currEntity.width > currStructure.x)
                     && !(currEntity.x >= currStructure.x + currStructure.width)){
                         
@@ -193,7 +194,7 @@ public class GamePanel extends JPanel implements Runnable{
 
                     //collision detection
                     if((currEntity.y + currEntity.height > currStructure.y)
-                    && !(currEntity.y > currStructure.y + currStructure.height)
+                    && !(currEntity.y >= currStructure.y + currStructure.height)
                     && (currEntity.x + currEntity.width > currStructure.x)
                     && !(currEntity.x >= currStructure.x + currStructure.width)){
                     

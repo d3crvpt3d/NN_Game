@@ -8,7 +8,7 @@ public class Neuron{
         this.bias = bias;
     }
 
-    public double calculate(int x){
-        return out_function.calc(x);
+    public double calculate(double x){
+        return out_function.calc(x+bias);
     }
 }

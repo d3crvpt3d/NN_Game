@@ -4,9 +4,11 @@ import javax.imageio.ImageIO;
 
 public class Player extends Entity{
 
-    Fps FPS;
+    private Fps FPS;
+    private int inputSize;
 
     public Player(Fps FPS, Double x, Double y){
+
         this.FPS = FPS;
         this.x = x;
         this.y = y;
@@ -18,6 +20,10 @@ public class Player extends Entity{
         }
         setPlayerImages();
         setDefaultValues();
+
+        input = new double[inputSize];
+
+        nn = new NeuralNetwork(4, hiddenlayer_arr, 4);
     }
 
     public void setDefaultValues(){
@@ -33,6 +39,9 @@ public class Player extends Entity{
         force_X = 0;
         force_Y_down = 0;
         onGround = false;
+        inputSize = 4;
+        hiddenlayer_arr = new int[1];
+        hiddenlayer_arr[0] = 4;
     }
 
     public void setPlayerImages(){

@@ -2,7 +2,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener{
-    public boolean aPressed, dPressed, spacePressed;
+    boolean aPressed, dPressed, spacePressed;
     int code;
 
     @Override

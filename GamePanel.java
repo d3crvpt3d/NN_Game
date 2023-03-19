@@ -3,10 +3,10 @@ import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable{
     
-    Fps FPS = new Fps(144); //set FPS
+    Fps FPS = new Fps(144); //set FPS/tickrate
 
     Structure[] structureList = new Structure[7]; // anzahl der structures
-    Entity[] entityList = new Entity[2]; //anzahl der player
+    Entity[] entityList = new Entity[10]; //anzahl der player
 
     //for iteration
     Entity currEntity;
@@ -33,6 +33,14 @@ public class GamePanel extends JPanel implements Runnable{
         //declare Entity's and Structures
         entityList[0] = new Player(FPS, 400., 400.);
         entityList[1] = new Player(FPS, 350., 600.);
+        entityList[2] = new Player(FPS, 350., 600.);
+        entityList[3] = new Player(FPS, 350., 600.);
+        entityList[4] = new Player(FPS, 350., 600.);
+        entityList[5] = new Player(FPS, 350., 600.);
+        entityList[6] = new Player(FPS, 350., 600.);
+        entityList[7] = new Player(FPS, 350., 600.);
+        entityList[8] = new Player(FPS, 350., 600.);
+        entityList[9] = new Player(FPS, 350., 600.);
 
         structureList[0] = new Walls(0,1060,1920,20, "stone");
         structureList[1] = new Walls(0,0,20,1080, "stone");
@@ -70,7 +78,8 @@ public class GamePanel extends JPanel implements Runnable{
             //per tick
             if(delta >= 1){
                 for(iterator2 = 0; iterator2 < entityList.length; iterator2++){
-                    entityList[iterator2].update();
+                    entityList[iterator2].update(); //update nn
+                    entityList[iterator2].updateTexture(); //update textures
                 }
                 this.update();
                 repaint();
@@ -93,16 +102,8 @@ public class GamePanel extends JPanel implements Runnable{
 
             
 
-            //controls for player
-            if(keyHgp.aPressed){
-                currEntity.direction = "left";
-                if(currEntity.onGround){
-                    currEntity.force_X -= currEntity.speed;
-                }else{
-                    currEntity.force_X -= currEntity.airSpeed;
-                }
-            }
-            if(keyHgp.dPressed){
+            //controls
+            if(currEntity.outputs == 1){
                 currEntity.direction = "right";
                 if(currEntity.onGround){
                     currEntity.force_X += currEntity.speed;
@@ -110,7 +111,15 @@ public class GamePanel extends JPanel implements Runnable{
                     currEntity.force_X += currEntity.airSpeed;
                 }
             }
-            if(keyHgp.spacePressed && currEntity.onGround){
+            if(currEntity.outputs == 2){
+                currEntity.direction = "left";
+                if(currEntity.onGround){
+                    currEntity.force_X -= currEntity.speed;
+                }else{
+                    currEntity.force_X -= currEntity.airSpeed;
+                }
+            }
+            if(currEntity.outputs == 3 && currEntity.onGround){
                 currEntity.direction = "jump"; //visual
                 currEntity.force_Y_down = -currEntity.gravity*80;
                 currEntity.onGround = false;

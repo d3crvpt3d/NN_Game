@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable{
         this.keyHgp = keyHgp;
         this.setDoubleBuffered(true);
         this.setFocusable(true);
-        this.setBackground(Color.white);
+        this.setBackground(Color.lightGray);
 
         //declare Entity's and Structures
         for(it = 0; it < entityList.length; it++){

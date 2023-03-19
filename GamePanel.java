@@ -1,12 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class GamePanel extends JPanel implements Runnable{
     
-    Fps FPS = new Fps(144); //set FPS/tickrate
+    Fps FPS = new Fps(60); //set FPS/tickrate
 
-    Structure[] structureList = new Structure[7]; // anzahl der structures
-    Entity[] entityList = new Entity[10]; //anzahl der player
+    Structure[] structureList = new Structure[20]; // anzahl der structures
+    Entity[] entityList = new Entity[100]; //anzahl der player
 
     //for iteration
     Entity currEntity;
@@ -18,6 +19,13 @@ public class GamePanel extends JPanel implements Runnable{
     //iteratoren
     int iterator;
     int iterator2;
+    int it;
+
+    //generating World
+    Random rand = new Random();
+
+
+
 
     Thread gameThread;
     Player player;
@@ -31,24 +39,19 @@ public class GamePanel extends JPanel implements Runnable{
         this.setBackground(Color.white);
 
         //declare Entity's and Structures
-        entityList[0] = new Player(FPS, 400., 400.);
-        entityList[1] = new Player(FPS, 350., 600.);
-        entityList[2] = new Player(FPS, 350., 600.);
-        entityList[3] = new Player(FPS, 350., 600.);
-        entityList[4] = new Player(FPS, 350., 600.);
-        entityList[5] = new Player(FPS, 350., 600.);
-        entityList[6] = new Player(FPS, 350., 600.);
-        entityList[7] = new Player(FPS, 350., 600.);
-        entityList[8] = new Player(FPS, 350., 600.);
-        entityList[9] = new Player(FPS, 350., 600.);
+        for(it = 0; it < entityList.length; it++){
+            entityList[it] = new Player(FPS, 350., 600.);
+        }
+        
 
         structureList[0] = new Walls(0,1060,1920,20, "stone");
         structureList[1] = new Walls(0,0,20,1080, "stone");
         structureList[2] = new Walls(1900,0,20,1080, "stone");
         structureList[3] = new Walls(0,0,1920,20, "stone");
-        structureList[4] = new Walls(20,960,200,10);
-        structureList[5] = new Walls(1700,860,200,10);
-        structureList[6] = new Walls(20,760,200,10);
+        
+        for(it = 4; it < structureList.length; it++){
+            structureList[it] = new Walls(rand.nextInt(1821), rand.nextInt(981), rand.nextInt(81) + 20, rand.nextInt(81) + 20, "stone");
+        }
     }
 
     public void startGameThread(){
@@ -79,7 +82,6 @@ public class GamePanel extends JPanel implements Runnable{
             if(delta >= 1){
                 for(iterator2 = 0; iterator2 < entityList.length; iterator2++){
                     entityList[iterator2].update(); //update nn
-                    entityList[iterator2].updateTexture(); //update textures
                 }
                 this.update();
                 repaint();
@@ -230,6 +232,7 @@ public class GamePanel extends JPanel implements Runnable{
                 currEntity.force_X = 0;
             }
 
+            entityList[iterator2].updateTexture();
             //player iterator end
         }
 
@@ -239,15 +242,16 @@ public class GamePanel extends JPanel implements Runnable{
     @Override
     public void paint(Graphics g) { // paint() method
 		super.paint(g);
-		for(int i = 0; i < structureList.length; i++){
-            currStructure = structureList[i];
+		for(it = 0; it < structureList.length; it++){
+            currStructure = structureList[it];
 
-            g.drawImage(currStructure.getImg(), (int)currStructure.x, (int)currStructure.y,this);
+            g.drawImage(currStructure.getImg(), (int)currStructure.x, (int)currStructure.y, null);
         }
-        for(int j = 0; j < entityList.length; j++){
-            currEntity = entityList[j];
 
-            g.drawImage(currEntity.getImg(), (int)currEntity.x, (int)currEntity.y, this);
+        for(it = 0; it < entityList.length; it++){
+            currEntity = entityList[it];
+
+            g.drawImage(currEntity.getImg(), (int)currEntity.x, (int)currEntity.y, null);
         }
 	}
 }

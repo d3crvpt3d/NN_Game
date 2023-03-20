@@ -1,10 +1,8 @@
-import javax.swing.*;
-import java.awt.*;
 import java.util.Random;
 
-public class GamePanel extends JPanel implements Runnable{
+public class GamePanel implements Runnable{
     
-    Fps FPS = new Fps(60); //set FPS/tickrate
+    Tickrate tickrate = new Tickrate(60); //set Tickrate "60=default"
 
     Structure[] structureList = new Structure[20]; // anzahl der structures
     Entity[] entityList = new Entity[100]; //anzahl der player
@@ -34,24 +32,30 @@ public class GamePanel extends JPanel implements Runnable{
     public GamePanel(KeyHandler keyHgp){
 
         this.keyHgp = keyHgp;
-        this.setDoubleBuffered(true);
-        this.setFocusable(true);
-        this.setBackground(Color.lightGray);
+        
 
         //declare Entity's and Structures
         for(it = 0; it < entityList.length; it++){
-            entityList[it] = new Player(FPS, 50., 900.);
+            entityList[it] = new Player(tickrate, 50., 900.);
         }
         
 
-        structureList[0] = new Walls(0,1060,1920,20, "stone");
-        structureList[1] = new Walls(0,0,20,1080, "stone");
-        structureList[2] = new Walls(1900,0,20,1080, "stone");
-        structureList[3] = new Walls(0,0,1920,20, "stone");
+        structureList[0] = new Walls(0,1060,1920,20, "default");
+        structureList[1] = new Walls(0,0,20,1080, "default");
+        structureList[2] = new Walls(1900,0,20,1080, "default");
+        structureList[3] = new Walls(0,0,1920,20, "default");
         
         for(it = 4; it < structureList.length; it++){
             structureList[it] = new Walls(rand.nextInt(1721), rand.nextInt(881), rand.nextInt(181) + 20, rand.nextInt(181) + 20, "stone");
         }
+    }
+
+    public Structure[] getStructureList() {
+        return structureList;
+    }
+
+    public Entity[] getEntityList() {
+        return entityList;
     }
 
     public void startGameThread(){
@@ -62,7 +66,7 @@ public class GamePanel extends JPanel implements Runnable{
     @Override
     public void run() {
 
-        double drawInterval = 1000000000/FPS.FPS;
+        double drawInterval = 1000000000/tickrate.Tickrate;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -84,13 +88,13 @@ public class GamePanel extends JPanel implements Runnable{
                     entityList[iterator2].update(); //update nn
                 }
                 this.update();
-                repaint();
+                //repaint();
                 delta--;
                 drawCount++;
             }
 
             if(timer >= 1000000000){
-                System.out.println("FPS: " + drawCount);
+                System.out.println("Tickrate: " + drawCount);
                 drawCount = 0;
                 timer = 0;
             }
@@ -106,7 +110,7 @@ public class GamePanel extends JPanel implements Runnable{
 
             //controls
             if(currEntity.outputs == 1){
-                currEntity.direction = "right";
+                currEntity.direction = "right"; //visual
                 if(currEntity.onGround){
                     currEntity.force_X += currEntity.speed;
                 }else{
@@ -114,7 +118,7 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
             if(currEntity.outputs == 2){
-                currEntity.direction = "left";
+                currEntity.direction = "left"; //visual
                 if(currEntity.onGround){
                     currEntity.force_X -= currEntity.speed;
                 }else{
@@ -239,19 +243,19 @@ public class GamePanel extends JPanel implements Runnable{
         //update end
     }        
 
-    @Override
-    public void paint(Graphics g) { // paint() method
-		super.paint(g);
-		for(it = 0; it < structureList.length; it++){
-            currStructure = structureList[it];
+    //@Override
+    //public void paint(Graphics g) { // paint() method
+	//	super.paint(g);
+	//	for(it = 0; it < structureList.length; it++){
+    //        currStructure = structureList[it];
 
-            g.drawImage(currStructure.getImg(), (int)currStructure.x, (int)currStructure.y, null);
-        }
+    //        g.drawImage(currStructure.getImg(), (int)currStructure.x, (int)currStructure.y, null);
+    //    }
 
-        for(it = 0; it < entityList.length; it++){
-            currEntity = entityList[it];
+    //    for(it = 0; it < entityList.length; it++){
+    //        currEntity = entityList[it];
 
-            g.drawImage(currEntity.getImg(), (int)currEntity.x, (int)currEntity.y, null);
-        }
-	}
+    //        g.drawImage(currEntity.getImg(), (int)currEntity.x, (int)currEntity.y, null);
+    //    }
+	//}
 }

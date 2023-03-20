@@ -37,11 +37,13 @@ public class Entity implements GetImage{
             }
     }
 
+    //SET INPUTS
     private void updateInputs(){
         input[0] = x;
         input[1] = y;
         input[2] = force_X;
-        input[3] = boolToDouble(onGround);
+        input[3] = force_Y_down;
+        input[4] = boolToDouble(onGround);
     }
 
     private double boolToDouble(boolean b){

@@ -5,7 +5,7 @@ public class GameFrame extends JFrame{
         setTitle("Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLocation(0, 0); //mitte von 1080p
+        setLocation(0, 0);
         setResizable(false);
         setSize(1920, 1080);
         setUndecorated(true);

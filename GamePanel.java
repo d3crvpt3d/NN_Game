@@ -36,7 +36,7 @@ public class GamePanel implements Runnable{
 
         //declare Entity's and Structures
         for(it = 0; it < entityList.length; it++){
-            entityList[it] = new Player(50., 900.);
+            entityList[it] = new Player(50., 900., structureList);
         }
         
 

@@ -6,8 +6,8 @@ public class Player extends Entity{
 
     private int inputSize;
 
-    public Player(Double x, Double y){
-
+    public Player(Double x, Double y, Structure[] strucList){
+        this.strucList = strucList;
         this.x = x;
         this.y = y;
 
@@ -37,7 +37,7 @@ public class Player extends Entity{
         force_X = 0;
         force_Y_down = 0;
         onGround = false;
-        inputSize = 5;                          //INPUT SIZE (need to add inputs in "Entity" if more then 5 are used)
+        inputSize = 7;                          //INPUT SIZE (need to add inputs in "Entity" if more then 5 are used)
         hiddenlayer_arr = new int[2];
         hiddenlayer_arr[0] = 4;
         hiddenlayer_arr[1] = 4;

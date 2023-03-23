@@ -8,7 +8,7 @@ public class NeuralNetwork {
 
     long weightReadNumber;
 
-    public NeuralNetwork(int inputDepth, int[] hiddenLayer, int outputDepth, int batch){
+    public NeuralNetwork(int inputDepth, int[] hiddenLayer, int outputDepth){
         
         //set layer size
         this.layer = new Layer[hiddenLayer.length+2];
@@ -29,23 +29,13 @@ public class NeuralNetwork {
 
         weights = new double[hiddenLayer.length + 1][Math.max(inputDepth * hiddenLayer[0], hiddenLayer[0] * outputDepth)]; //["][max layer*layer]
 
-        if(batch == 0){
-            //declare weights random
-            for(it = 0; it < weights.length; it++){
-                for(it2 = 0; it2 < weights[0].length; it2++){
-                    weights[it][it2] = -1 + 2 * Math.random();
-                }
-            }
-        }else{
-            //declare weights from FILE
-            weightReadNumber = 0;
-
-            for(it = 0; it < weights.length; it++){
-                for(it2 = 0; it2 < weights[0].length; it2++){
-                    weights[it][it2] = getNextWeight() + mutationRate * (-1 * + 2 * Math.random());
-                }
+        //declare weights random
+        for(it = 0; it < weights.length; it++){
+            for(it2 = 0; it2 < weights[0].length; it2++){
+                weights[it][it2] = -1 + 2 * Math.random();
             }
         }
+        
     }
 
     //returns next weight from file
@@ -61,7 +51,8 @@ public class NeuralNetwork {
         return output;
     }
 
-    private void updateOutput(){
+    //update Output (prob not properly)
+    private void updateOutput(){//TODO
 
         //per layer
         for(it = 0; it < layer.length-1; it++){

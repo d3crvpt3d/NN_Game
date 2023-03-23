@@ -1,5 +1,8 @@
 public class MainGame{
-    public static void main(String[] args) {
+
+    double[][][] weightList; // which Layer; which neuron of L0; which neuron of L+1
+
+    public static void main(String[] args) throws InterruptedException {
         KeyHandler keyH = new KeyHandler();
         
         GamePanel panel1 = new GamePanel(keyH);
@@ -23,18 +26,32 @@ public class MainGame{
 
             if(currTime - startTime >= 10*nano){
 
+                panel1.stall();       //stalls the thread
+                System.out.println();System.out.println("panel1 wait..");System.out.println();
+
+                //
                 saveBest10Percent();
 
-                new GamePanel(keyH, "");
+                panel1.entityList = new EntListFromFile().get();
+                //
 
-
+                panel1.startGameThread();     //awakens the thread
+                System.out.println();System.out.println("panel1 resume..");System.out.println();
 
                 startTime = currTime;
             }
         }
     }
 
+    //averages the best .1 Weights from EntityList and saves them in a File
     static void saveBest10Percent(){
+        
 
+        
+        //TODO
+    }
+
+    Entity[] getNewEntityList(){
+        return null;
     }
 }

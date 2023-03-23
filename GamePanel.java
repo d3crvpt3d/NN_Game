@@ -48,27 +48,6 @@ public class GamePanel implements Runnable{
         }
     }
 
-    public GamePanel(KeyHandler keyHgp, String new_Batch){
-
-        this.keyHgp = keyHgp;
-        
-
-        //declare IMPROVED Entity's and Structures
-        for(it = 0; it < entityList.length; it++){
-            entityList[it] = new Player(50., 900., structureList);
-        }
-        
-
-        structureList[0] = new Walls(0,1060,1920,20, "default");
-        structureList[1] = new Walls(0,0,20,1080, "default");
-        structureList[2] = new Walls(1900,0,20,1080, "default");
-        structureList[3] = new Walls(0,0,1920,20, "default");
-        
-        for(it = 4; it < structureList.length; it++){
-            structureList[it] = new Walls(rand.nextInt(1721), rand.nextInt(881), rand.nextInt(181) + 20, rand.nextInt(181) + 20, "stone");
-        }
-    }
-
     public Structure[] getStructureList() {
         return structureList;
     }
@@ -261,19 +240,7 @@ public class GamePanel implements Runnable{
         //update end
     }        
 
-    //@Override
-    //public void paint(Graphics g) { // paint() method
-	//	super.paint(g);
-	//	for(it = 0; it < structureList.length; it++){
-    //        currStructure = structureList[it];
-
-    //        g.drawImage(currStructure.getImg(), (int)currStructure.x, (int)currStructure.y, null);
-    //    }
-
-    //    for(it = 0; it < entityList.length; it++){
-    //        currEntity = entityList[it];
-
-    //        g.drawImage(currEntity.getImg(), (int)currEntity.x, (int)currEntity.y, null);
-    //    }
-	//}
+    public void stall() throws InterruptedException{
+        gameThread = null;
+    }
 }

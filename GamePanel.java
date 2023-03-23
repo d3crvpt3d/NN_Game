@@ -23,8 +23,6 @@ public class GamePanel implements Runnable{
     Random rand = new Random();
 
 
-
-
     Thread gameThread;
     Player player;
     KeyHandler keyHgp;
@@ -35,6 +33,27 @@ public class GamePanel implements Runnable{
         
 
         //declare Entity's and Structures
+        for(it = 0; it < entityList.length; it++){
+            entityList[it] = new Player(50., 900., structureList);
+        }
+        
+
+        structureList[0] = new Walls(0,1060,1920,20, "default");
+        structureList[1] = new Walls(0,0,20,1080, "default");
+        structureList[2] = new Walls(1900,0,20,1080, "default");
+        structureList[3] = new Walls(0,0,1920,20, "default");
+        
+        for(it = 4; it < structureList.length; it++){
+            structureList[it] = new Walls(rand.nextInt(1721), rand.nextInt(881), rand.nextInt(181) + 20, rand.nextInt(181) + 20, "stone");
+        }
+    }
+
+    public GamePanel(KeyHandler keyHgp, String new_Batch){
+
+        this.keyHgp = keyHgp;
+        
+
+        //declare IMPROVED Entity's and Structures
         for(it = 0; it < entityList.length; it++){
             entityList[it] = new Player(50., 900., structureList);
         }
@@ -72,7 +91,6 @@ public class GamePanel implements Runnable{
         long currentTime;
         long timer = 0;
         int drawCount = 0;
-
 
         while(gameThread != null){
 

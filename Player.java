@@ -17,13 +17,31 @@ public class Player extends Entity{
             System.out.println(e);
         }
         setPlayerImages();
-        setDefaultValues();
+        setDefaultValues(0);
+
+        input = new double[inputSize];
+    }
+
+    public Player(Double x, Double y, Structure[] strucList, String new_Batch){
+
+        this.strucList = strucList;
+        this.x = x;
+        this.y = y;
+
+        try{
+            img = ImageIO.read(new File("bin/character_right.png"));
+        }catch(IOException e){
+            System.out.println(e);
+        }
+
+        setPlayerImages();
+        setDefaultValues(1);
 
         input = new double[inputSize];
     }
 
     //CHANGE DEFAULT VALUES
-    public void setDefaultValues(){
+    public void setDefaultValues(int batch){
         speed = 13;                     // (beschleunigung) 15pix/tick^2
         maxSpeed = 13;                  // (max ground speed) 15pix/tick
         maxSpeed_Y = 15;                // (max fall speed) 16pix/tick
@@ -42,7 +60,11 @@ public class Player extends Entity{
         hiddenlayer_arr[0] = 4;
         hiddenlayer_arr[1] = 4;
 
-        nn = new NeuralNetwork(inputSize, hiddenlayer_arr, 4);
+        if(batch == 0){
+            nn = new NeuralNetwork(inputSize, hiddenlayer_arr, 4, 0);
+        }else{
+            nn = new NeuralNetwork(inputSize, hiddenlayer_arr, 4, 1);
+        }
     }
 
     public void setPlayerImages(){

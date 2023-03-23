@@ -6,7 +6,7 @@ public class Layer {
         this.depth = depth;
         neurons = new Neuron[depth];
         for(int i = 0; i < depth; i++){
-            neurons[i] = new Neuron(-1 + 2 * Math.random(), "relu");
+            neurons[i] = new Neuron(1, "relu");
         }
     }
 

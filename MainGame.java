@@ -12,5 +12,29 @@ public class MainGame{
 
         panel1.startGameThread();
         panelDisplay.startGameThread();
+
+        long startTime = System.nanoTime();
+        long currTime;
+        long nano = 1000000000;
+
+        while(true){
+
+            currTime = System.nanoTime();
+
+            if(currTime - startTime >= 10*nano){
+
+                saveBest10Percent();
+
+                new GamePanel(keyH, "");
+
+
+
+                startTime = currTime;
+            }
+        }
+    }
+
+    static void saveBest10Percent(){
+
     }
 }

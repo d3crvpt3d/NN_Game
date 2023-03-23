@@ -7,7 +7,6 @@ public class DisplayPanel extends JPanel implements Runnable{
     Entity[] entiList;
 
     public boolean active = true;
-
     Thread displayThread;
 
     int maxFPS = 144; //SET MAX DISPLAY FPS
@@ -61,15 +60,18 @@ public class DisplayPanel extends JPanel implements Runnable{
     
     @Override
     public void paint(Graphics g) { // paint() method
-		super.paint(g);
-		for(it = 0; it < strucList.length; it++){
+        super.paint(g);
+
+        for(it = 0; it < strucList.length; it++){
 
             g.drawImage(strucList[it].getImg(), (int)strucList[it].x, (int)strucList[it].y, null);
         }
 
+        
         for(it = 0; it < entiList.length; it++){
 
             g.drawImage(entiList[it].getImg(), (int)entiList[it].x, (int)entiList[it].y, null);
         }
+        
 	}
 }

@@ -4,12 +4,10 @@ import javax.imageio.ImageIO;
 
 public class Player extends Entity{
 
-    private Tickrate tickrate;
     private int inputSize;
 
-    public Player(Tickrate tickrate, Double x, Double y){
+    public Player(Double x, Double y){
 
-        this.tickrate = tickrate;
         this.x = x;
         this.y = y;
 
@@ -26,11 +24,12 @@ public class Player extends Entity{
 
     //CHANGE DEFAULT VALUES
     public void setDefaultValues(){
-        speed = 800/tickrate.Tickrate;                    // (beschleunigung)
-        maxSpeed = 800/tickrate.Tickrate;                 // (max ground speed)
-        maxSpeed_Y = 1000/tickrate.Tickrate;              // (max fall speed)
-        airSpeed = speed * .015;
-        gravity = 12/(double)tickrate.Tickrate;
+        speed = 13;                     // (beschleunigung) 15pix/tick^2
+        maxSpeed = 13;                  // (max ground speed) 15pix/tick
+        maxSpeed_Y = 15;                // (max fall speed) 16pix/tick
+        airSpeed = .3;                  // (adjustierung im fall) 0,012pix/tick^2
+        gravity = .5;
+        jump_F = 500;
         width = 32;
         height = 64;
         luftwiderstand = .99;
@@ -38,7 +37,7 @@ public class Player extends Entity{
         force_X = 0;
         force_Y_down = 0;
         onGround = false;
-        inputSize = 5;                          //INPUT SIZE
+        inputSize = 5;                          //INPUT SIZE (need to add inputs in "Entity" if more then 5 are used)
         hiddenlayer_arr = new int[2];
         hiddenlayer_arr[0] = 4;
         hiddenlayer_arr[1] = 4;

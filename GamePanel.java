@@ -36,7 +36,7 @@ public class GamePanel implements Runnable{
 
         //declare Entity's and Structures
         for(it = 0; it < entityList.length; it++){
-            entityList[it] = new Player(tickrate, 50., 900.);
+            entityList[it] = new Player(50., 900.);
         }
         
 
@@ -127,7 +127,7 @@ public class GamePanel implements Runnable{
             }
             if(currEntity.outputs == 3 && currEntity.onGround){
                 currEntity.direction = "jump"; //visual
-                currEntity.force_Y_down = -currEntity.gravity*80;
+                currEntity.force_Y_down = -currEntity.jump_F;
                 currEntity.onGround = false;
             }
 

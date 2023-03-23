@@ -1,7 +1,7 @@
 import java.awt.image.BufferedImage;
 
 public class Entity implements GetImage{
-    double x, y, width, height, force_X, force_Y_down, luftwiderstand, speed, airSpeed, gravity, maxSpeed, maxSpeed_Y;
+    double x, y, width, height, force_X, force_Y_down, luftwiderstand, speed, airSpeed, gravity, maxSpeed, maxSpeed_Y, jump_F;
     boolean onGround;
     BufferedImage right, left, jump;
     String direction;

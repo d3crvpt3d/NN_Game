@@ -2,7 +2,7 @@ import java.awt.image.BufferedImage;
 
 public class Entity implements GetImage{
     double x, y, width, height, force_X, force_Y_down, luftwiderstand, speed, airSpeed,
-    gravity, maxSpeed, maxSpeed_Y, jump_F, ydis, minydis, xdis, minxdis, sec_minxdis, sec_minydis;
+    gravity, maxSpeed, maxSpeed_Y, jump_F, ydis, minydis, xdis, minxdis, sec_minxdis, sec_minydis, score = 0;
     boolean onGround;
     BufferedImage right, left, jump;
     String direction;
@@ -21,6 +21,9 @@ public class Entity implements GetImage{
     }
 
     public void update(){
+
+        //score
+        score += 1/y;
 
         updateInputs();
 

@@ -61,8 +61,8 @@ public class Entity implements GetImage{
 
         for(it = 0; it < strucList.length; it++){
 
-            xdis = Math.abs(this.x - strucList[it].x);
-            ydis = Math.abs(this.y - strucList[it].y);
+            xdis = Math.abs(x - strucList[it].x);
+            ydis = Math.abs(y - strucList[it].y);
 
             if(xdis < minxdis){
                 minxdis = xdis;
@@ -76,7 +76,6 @@ public class Entity implements GetImage{
                 sec_minydis = ydis;
             }
         }
-
     }
 
     private double boolToDouble(boolean b){

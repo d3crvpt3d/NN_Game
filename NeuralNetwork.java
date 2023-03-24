@@ -1,9 +1,10 @@
 public class NeuralNetwork {
     
-    double lastMax, mutationRate = .1;
+    double lastMax;
     double[] inputs;
-    double[][] weights, tmp_out;
-    int it, it2, indx, output;
+    double[][] tmp_out;
+    double[][][] weights;
+    int it, it2, it3, indx, output;
     Layer[] layer;
 
     long weightReadNumber;
@@ -27,21 +28,22 @@ public class NeuralNetwork {
         //set output layer depth
         layer[layer.length-1] = new Layer(outputDepth);
 
-        weights = new double[hiddenLayer.length + 1][Math.max(inputDepth * hiddenLayer[0], hiddenLayer[0] * outputDepth)]; //["][max layer*layer]
+        weights = new double[hiddenLayer.length + 1][Math.max(inputDepth * hiddenLayer[0], hiddenLayer[0] * outputDepth)][Math.max(inputDepth * hiddenLayer[0], hiddenLayer[0] * outputDepth)];
 
         //declare weights random
         for(it = 0; it < weights.length; it++){
             for(it2 = 0; it2 < weights[0].length; it2++){
-                weights[it][it2] = -1 + 2 * Math.random();
+                for(it3 = 0; it3 < weights[0][0].length; it3++){
+                    weights[it][it2][it3] = -1 + 2 * Math.random(); //[currLayer][inputNeurons][outputNeurons]
+                }
             }
         }
-        
     }
 
     //returns next weight from file
     double getNextWeight(){
         weightReadNumber++;
-        return 0;//TODO
+        return -1 + 2 * Math.random();//TODO
     }
 
     //get Action to be performed (0:null,1:right,2:left,3:jump)
@@ -51,24 +53,28 @@ public class NeuralNetwork {
         return output;
     }
 
-    //update Output (prob not properly)
-    private void updateOutput(){//TODO
+    //update Output
+    private void updateOutput(){
 
-        //per layer
-        for(it = 0; it < layer.length-1; it++){
-
-            //per neuron
-            for (it2 = 0; it2 < layer[it].getDepth(); it2++) {
-
-                //dot multiplication
-                tmp_out[it+1][it2] += layer[it].neurons[it2].calculate(tmp_out[it][it2] * weights[it][it2]); //neuron does bias and output func
-            }
-
-            //end of per layer
+        for(it = 0; it < tmp_out.length-1; it++){
+            tmp_out[it+1] = matrixMultiplication(weights[it], tmp_out[it]);
         }
 
         output = getIndexOfMax();
         //end of updateOutput
+    }
+
+    //returns dot product of input and weights (Layer+1)
+    double[] matrixMultiplication(double[][] a, double[] b){
+        double[] tmp = new double[a[0].length];
+
+        for(it2 = 0; it2 < a.length; it2++){
+            for(it3 = 0; it3 < b.length; it3++){
+                tmp[it2] += a[it2][it3] * b[it3];
+            }    
+        }
+
+        return tmp;
     }
 
     //return index of max output neuron

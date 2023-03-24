@@ -85,7 +85,6 @@ public class GamePanel implements Runnable{
                     entityList[iterator2].update(); //update nn
                 }
                 this.update();
-                //repaint();
                 delta--;
                 drawCount++;
             }
@@ -99,7 +98,7 @@ public class GamePanel implements Runnable{
     }
 
     public void update(){
-
+        
         for(iterator2 = 0; iterator2 < entityList.length; iterator2++){ //player iterator
             currEntity = entityList[iterator2];
 

@@ -3,6 +3,7 @@ public class MainGame{
     double[][][] weightList; // which Layer; which neuron of L0; which neuron of L+1
 
     public static void main(String[] args) throws InterruptedException {
+        
         KeyHandler keyH = new KeyHandler();
         
         GamePanel panel1 = new GamePanel(keyH);
@@ -45,8 +46,6 @@ public class MainGame{
 
     //averages the best .1 Weights from EntityList and saves them in a File
     static void saveBest10Percent(){
-        
-
         
         //TODO
     }

@@ -4,14 +4,15 @@ public class NeuralNetwork {
     double[] inputs;
     double[][] tmp_out;
     double[][][] weights;
-    int it, it2, it3, indx, output;
+    int it, it2, it3, indx, output, ouputDepth;
     Layer[] layer;
 
     long weightReadNumber;
 
     public NeuralNetwork(int inputDepth, int[] hiddenLayer, int outputDepth){
-        
-        //set layer size
+
+        this.ouputDepth = outputDepth;
+
         this.layer = new Layer[hiddenLayer.length+2];
 
         //set tmp_out dimension (max layer depth)
@@ -21,20 +22,27 @@ public class NeuralNetwork {
         layer[0] = new Layer(inputDepth);
 
         //set hidden layer depth
-        for(it = 1; it < layer.length - 1 ; it++){
+        for(int it = 1; it < layer.length - 1 ; it++){
             layer[it] = new Layer(hiddenLayer[it-1]);
         }
 
         //set output layer depth
         layer[layer.length-1] = new Layer(outputDepth);
 
-        weights = new double[hiddenLayer.length + 1][Math.max(inputDepth * hiddenLayer[0], hiddenLayer[0] * outputDepth)][Math.max(inputDepth * hiddenLayer[0], hiddenLayer[0] * outputDepth)];
+        //+++++++++++++
+        weights = new double[hiddenLayer.length + 1]
+                            [Math.max(Math.max(inputDepth, hiddenLayer[0]), outputDepth)]
+                            [Math.max(Math.max(inputDepth, hiddenLayer[0]), outputDepth)];
+        
+        //+++++++++++++
 
         //declare weights random
-        for(it = 0; it < weights.length; it++){
-            for(it2 = 0; it2 < weights[0].length; it2++){
-                for(it3 = 0; it3 < weights[0][0].length; it3++){
+        for(int it = 0; it < weights.length; it++){
+            for(int it2 = 0; it2 < weights[it].length; it2++){
+                for(int it3 = 0; it3 < weights[it][it2].length; it3++){
+
                     weights[it][it2][it3] = -1 + 2 * Math.random(); //[currLayer][inputNeurons][outputNeurons]
+
                 }
             }
         }
@@ -56,7 +64,7 @@ public class NeuralNetwork {
     //update Output
     private void updateOutput(){
 
-        for(it = 0; it < tmp_out.length-1; it++){
+        for(int it = 0; it < tmp_out.length-1; it++){
             tmp_out[it+1] = matrixMultiplication(weights[it], tmp_out[it]);
         }
 
@@ -66,20 +74,20 @@ public class NeuralNetwork {
 
     //returns dot product of input and weights (Layer+1)
     double[] matrixMultiplication(double[][] a, double[] b){
-        double[] tmp = new double[a[0].length];
 
-        for(it2 = 0; it2 < a.length; it2++){
-            for(it3 = 0; it3 < b.length; it3++){
-                tmp[it2] += a[it2][it3] * b[it3];
+        double[] tmp = new double[a[0].length]; //out size
+
+        for(int it2 = 0; it2 < a[0].length; it2++){    //out iterator
+            for(int it3 = 0; it3 < b.length; it3++){   //in iterator
+                tmp[it2] += a[it3][it2] * b[it3];
             }    
         }
-
         return tmp;
     }
 
     //return index of max output neuron
     private int getIndexOfMax(){
-        for(it = 0; it < tmp_out[tmp_out.length-1].length; it++){
+        for(int it = 0; it < ouputDepth; it++){
             if(tmp_out[tmp_out.length-1][it] > lastMax){
                 lastMax = tmp_out[tmp_out.length-1][it];
                 indx = it;

@@ -23,7 +23,7 @@ public class Entity implements GetImage{
     public void update(){
 
         //score
-        score += 1/y;
+        score += 100* 1/y;
 
         updateInputs();
 

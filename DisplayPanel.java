@@ -28,7 +28,7 @@ public class DisplayPanel extends JPanel implements Runnable{
 
     @Override
     public void run() {
-        double drawInterval = 1000000000/maxFPS;
+        double drawInterval = (double)maxFPS/1000000000; //optimized from 1000000000/maxFPS, so it uses * in loop instead of /
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -39,7 +39,7 @@ public class DisplayPanel extends JPanel implements Runnable{
 
             currentTime = System.nanoTime();
 
-            delta += (currentTime - lastTime) / drawInterval;
+            delta += (currentTime - lastTime) * drawInterval;
             timer += (currentTime - lastTime);
             lastTime = currentTime;
 

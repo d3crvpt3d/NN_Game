@@ -4,12 +4,12 @@ public class GamePanel implements Runnable{
     
     Tickrate tickrate = new Tickrate(60); //set Tickrate "60=default"
 
-    Structure[] structureList = new Structure[20]; // anzahl der structures
-    Entity[] entityList = new Entity[100]; //anzahl der player
-
     //for iteration
     Entity currEntity;
     Structure currStructure;
+
+    Structure[] structureList;
+    Entity[] entityList;
 
     //collision variables
     boolean collision = false;
@@ -22,20 +22,30 @@ public class GamePanel implements Runnable{
     //generating World
     Random rand = new Random();
 
+    boolean active_bool = true;
 
     Thread gameThread;
     Player player;
     KeyHandler keyHgp;
 
-    public GamePanel(KeyHandler keyHgp){
+    public GamePanel(KeyHandler keyHgp, boolean new_){
 
         this.keyHgp = keyHgp;
-        
+        //make sure entityList not gets Overwritten
+        if(new_){
+            new_ = false;
+            structureList = new Structure[20]; // anzahl der structures
+            entityList = new Entity[100]; //anzahl der player
 
-        //declare Entity's and Structures
-        for(it = 0; it < entityList.length; it++){
-            entityList[it] = new Player(50., 900., structureList);
+            
+            //declare Entity's
+            for(int it = 0; it < entityList.length; it++){
+                entityList[it] = new Player(50., 900., structureList);
+            }
+
         }
+
+
         
 
         structureList[0] = new Walls(0,1060,1920,20, "default");
@@ -43,7 +53,7 @@ public class GamePanel implements Runnable{
         structureList[2] = new Walls(1900,0,20,1080, "default");
         structureList[3] = new Walls(0,0,1920,20, "default");
         
-        for(it = 4; it < structureList.length; it++){
+        for(int it = 4; it < structureList.length; it++){
             structureList[it] = new Walls(rand.nextInt(1721), rand.nextInt(881), rand.nextInt(181) + 20, rand.nextInt(181) + 20, "stone");
         }
     }
@@ -64,27 +74,27 @@ public class GamePanel implements Runnable{
     @Override
     public void run() {
 
-        double drawInterval = 1000000000/tickrate.Tickrate;
+        double drawInterval = (double)tickrate.Tickrate/1000000000; //optimized for use of mult instead of divide
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
         int drawCount = 0;
 
-        while(gameThread != null){
+        while(active_bool){
 
             currentTime = System.nanoTime();
 
-            delta += (currentTime - lastTime) / drawInterval;
+            delta += (currentTime - lastTime) * drawInterval;
             timer += (currentTime - lastTime);
             lastTime = currentTime;
 
             //per tick
             if(delta >= 1){
-                for(iterator2 = 0; iterator2 < entityList.length; iterator2++){
+                for(int iterator2 = 0; iterator2 < entityList.length; iterator2++){
                     entityList[iterator2].update(); //update nn
                 }
-                this.update();
+                update();
                 delta--;
                 drawCount++;
             }
@@ -99,7 +109,7 @@ public class GamePanel implements Runnable{
 
     public void update(){
         
-        for(iterator2 = 0; iterator2 < entityList.length; iterator2++){ //player iterator
+        for(int iterator2 = 0; iterator2 < entityList.length; iterator2++){ //player iterator
             currEntity = entityList[iterator2];
 
             
@@ -132,7 +142,7 @@ public class GamePanel implements Runnable{
             
             //check onGround
             currEntity.onGround = false;
-            for(iterator = 0; iterator < structureList.length; iterator++){
+            for(int iterator = 0; iterator < structureList.length; iterator++){
                 currStructure = structureList[iterator];
                 if(currEntity.y + currEntity.height == currStructure.y
                 && currEntity.x + currEntity.width > currStructure.x
@@ -158,7 +168,7 @@ public class GamePanel implements Runnable{
                 currEntity.y += currEntity.force_Y_down;
 
                 //Y resolve
-                for(iterator = 0; iterator < structureList.length; iterator++){ //walls iterator
+                for(int iterator = 0; iterator < structureList.length; iterator++){ //walls iterator
                     currStructure = structureList[iterator];
 
                     //collision detection
@@ -200,7 +210,7 @@ public class GamePanel implements Runnable{
                 currEntity.x += currEntity.force_X;
 
                 //X resolve
-                for(iterator = 0; iterator < structureList.length; iterator++){//walls iterator
+                for(int iterator = 0; iterator < structureList.length; iterator++){//walls iterator
                     currStructure = structureList[iterator];
 
                     //collision detection
@@ -239,7 +249,7 @@ public class GamePanel implements Runnable{
         //update end
     }        
 
-    public void stall() throws InterruptedException{
-        gameThread = null;
+    public void stall(){
+        this.active_bool = false;
     }
 }

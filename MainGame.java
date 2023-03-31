@@ -7,7 +7,7 @@ public class MainGame{
         double quantityOfParents = .2, mutationRate = .01;
 
         GamePanel panel1 = new GamePanel(keyH, true);
-        DisplayPanel panelDisplay = new DisplayPanel(panel1.structureList, panel1.entityList);
+        DisplayPanel panelDisplay = new DisplayPanel(panel1.structureList, panel1.entityList, panel1.deltaTime);
         
         GameFrame frame1 = new GameFrame();
 
@@ -31,6 +31,10 @@ public class MainGame{
 
             if(currTime - startTime >= 10*nano){
 
+                //TODO
+                panel1.entityList = null;
+                //
+                
                 panel1.stall();       //stalls the thread
                 System.out.println();System.out.println("panel1 wait..");System.out.println();
 

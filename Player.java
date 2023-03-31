@@ -6,10 +6,11 @@ public class Player extends Entity{
 
     private int inputSize;
 
-    public Player(Double x, Double y, Structure[] strucList){
+    public Player(Double x, Double y, Structure[] strucList, DeltaTime deltaTime){
         this.strucList = strucList;
         this.x = x;
         this.y = y;
+        this.deltaTime = deltaTime;
 
         try{
             img = ImageIO.read(new File("bin/character_right.png"));
@@ -32,11 +33,11 @@ public class Player extends Entity{
         jump_F = 500;
         width = 32;
         height = 64;
-        luftwiderstand = .99;
         direction = "right";
         force_X = 0;
         force_Y_down = 0;
-        onGround = false;
+        vx = 0;
+        vy = 0;
         inputSize = 7;                          //INPUT SIZE (need to add inputs in "Entity" if more then 5 are used)
         hiddenlayer_arr = new int[2];
         hiddenlayer_arr[0] = 4;

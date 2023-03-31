@@ -1,33 +1,59 @@
 import java.awt.image.BufferedImage;
 
-public class Entity implements GetImage{
-    double x, y, width, height, force_X, force_Y_down, luftwiderstand, speed, airSpeed,
+public class Entity extends Thread{
+    double x, y, width, height, force_X, force_Y_down, vx, vy, luftwiderstand, speed, airSpeed,
     gravity, maxSpeed, maxSpeed_Y, jump_F, ydis, minydis, xdis, minxdis, sec_minxdis, sec_minydis, score = 0;
     boolean onGround;
     BufferedImage right, left, jump;
     String direction;
     BufferedImage img;
     double[] input;
-    int outputs, it;
+    int outputs, it, tickrate;
+
+    DeltaTime deltaTime;
 
     Structure[] strucList;
 
     NeuralNetwork nn;
     int[] hiddenlayer_arr;
 
-    @Override
     public BufferedImage getImg() {
         return img;
     }
 
-    public void update(){
+    public int getTicksPerSecond(){
+        return this.tickrate;
+    }
 
-        //score
-        score += 100* 1/y;
+    @Override
+    public void run(){
+        long lastTime, currTime, timeToSleep, millsec, counter = System.nanoTime();
+        int ticks = 0;
 
-        updateInputs();
+        while(true){
 
-        outputs = nn.getOutput(input);
+            lastTime = System.nanoTime();
+
+            update();
+            ticks++;
+
+            currTime = System.nanoTime();
+
+            timeToSleep = Math.max(0, deltaTime.drawInterval - (currTime - lastTime));
+            millsec = (long)(timeToSleep*0.000001);
+
+            if(currTime - counter >= 1000000000){
+                this.tickrate = ticks;
+                ticks = 0;
+                counter = currTime;
+            }
+
+            try {
+                Thread.sleep(millsec, (int)(timeToSleep-millsec*1000000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     void updateTexture(){
@@ -50,8 +76,8 @@ public class Entity implements GetImage{
 
         input[0] = minxdis;
         input[1] = minydis;
-        input[2] = force_X;
-        input[3] = force_Y_down;
+        input[2] = vx;
+        input[3] = vy;
         input[4] = boolToDouble(onGround);
         input[5] = sec_minxdis;
         input[6] = sec_minydis;
@@ -86,5 +112,96 @@ public class Entity implements GetImage{
             return 1;
         }
         return  0;
+    }
+
+    public void update() {
+
+        //score
+        score += 100* 1/y;
+
+        updateInputs();
+
+        outputs = nn.getOutput(input);
+        
+        switch(outputs){
+            case 0: ;
+            case 1: vx = speed;
+            case 2: vx = -speed;
+            case 3: force_Y_down = -jump_F;
+        }
+
+        //X Physics
+        vx += force_X;
+        x += vx;
+
+        //coll resolve X
+        if(vx != 0){
+            if(vx > 0){
+                for (Structure st : strucList) {
+                    if(x + width > st.x && st.x + width > x
+                    && y + height > st.y && st.y + height > y){
+                        x = st.x - width;
+                        force_X = 0;
+                        vx = 0;
+                    }
+                }
+
+            }else{
+                for (Structure st : strucList) {
+                    if(x + width > st.x && st.x + width > x
+                    && y + height > st.y && st.y + height > y){
+                        x = st.x + st.width;
+                        force_X = 0;
+                        vx = 0;
+                    }
+                }
+                
+            }
+
+        }
+
+        //should work TODO
+        onGround = false;
+        for(Structure struc: strucList){
+            if(y+height == struc.y){
+                onGround = true;
+            }
+        }
+
+        if(!onGround){
+            force_Y_down += gravity;
+        }
+
+        //Y Physics
+        vy += force_Y_down;
+        y += vy;
+
+        //coll resolve Y
+        if(vy != 0){
+            if(vy > 0){
+                for (it = 0; it < strucList.length; it++) {
+                    if(x + width > strucList[it].x && strucList[it].x + width > x
+                    && y + height > strucList[it].y && strucList[it].y + height > y){
+                        y = strucList[it].y - height;
+                        force_Y_down = 0;
+                        vy = 0;
+                    }
+                }
+
+            }else{
+                for (it = 0; it < strucList.length; it++) {
+                    if(x + width > strucList[it].x && strucList[it].x + width > x
+                    && y + height > strucList[it].y && strucList[it].y + height > y){
+                        y = strucList[it].y + strucList[it].height;
+                        force_Y_down = 0;
+                        vy = 0;
+                    }
+                }
+                
+            }
+
+        }
+
+        //run end
     }
 }

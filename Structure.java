@@ -1,11 +1,10 @@
 import java.awt.image.BufferedImage;
 
-public class Structure implements GetImage{
+public class Structure{
     double x, y, width, height;
     String texture;
     BufferedImage img;
     
-    @Override
     public BufferedImage getImg() {
         return img;
     }
